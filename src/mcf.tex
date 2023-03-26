@@ -11,9 +11,53 @@
 \title{Notes on Minimal Cost Flow}
 \author{陶大}
 
+\renewcommand{\emph}[1]{\textbf{#1}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+
 \begin{document}
 
 \maketitle
 \tableofcontents
+
+\section{Definitions}
+
+For a directed graph $G=(V, E)$, there is nonnegative capacity $u_e$ associated with each edge
+and balance $b_v$ with each vertex.
+For a flow over edge $e$, each unit costs $c_e$.
+
+\[
+    \min \sum_{e\in E} c_e x_e
+\]
+s.t.,
+\begin{align}
+    0\leqslant x_e \leqslant u_e,\qquad \forall e\in E\\
+    \sum_{e\text{ from }v} x_e - \sum_{e\text{ into }v} x_e = b_v,\qquad \forall v\in V
+\end{align}
+
+Vertices with positive $b_v$ are called \emph{supplies},
+and those with negative ones, \emph{demands}.
+Solutions satisfy constraints are \emph{feasible}.
+
+Without loss of generality, we can assume there is exactly one supply and one demand.
+They are called the \emph{source} and the \emph{sink} respectively.
+
+Usually, we are interested in min-cost solutions with maximal flows.
+Let $G=(V, E, {u_e}, {c_e}, {b_v})$ be a MCF, which a min-cost max flow is desired.
+Then we construct $G'=(V', E', {u'_e}, {c'_e}, {b'_v})$.
+\begin{align}
+    V'&=V,\\
+    E'&=E\cup\{e'\},\\
+    u'_e&=\begin{cases}
+        u_e,&\forall e\in E,\\
+        +\infinity,&e',
+    \end{cases}\\
+\end{align}
+
+% \begin{lemma}
+%     A maximal flow is also a feasible min-cost flow.
+% \end{lemma}
+
+
+\section{Applications}
 
 \end{document}
