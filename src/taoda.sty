@@ -1,0 +1,166 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{taoda}[2023/03/28 v1.0 (taoda)]
+\ProcessOptions
+
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{graphicx}
+\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage{hypernat}
+\RequirePackage{hyperref}
+\RequirePackage{lastpage}
+\RequirePackage{awesomebox}
+\RequirePackage{minted}
+
+%Theorems
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollay}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\renewcommand{\proofname}{֤Proof}
+
+%Number Theory
+\newcommand*{\naturalnums}{\mathbb{N}}
+\newcommand*{\integers}{\mathbb{Z}}
+\newcommand*{\rationals}{\mathbb{Q}}
+\newcommand*{\realnums}{\mathbb{R}}
+\newcommand*{\complexnums}{\mathbb{C}}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\rem}{rem}
+
+%Logic Operators
+\newcommand*{\imply}{\rightarrow}
+\newcommand*{\Imply}{\Rightarrow}
+\newcommand*{\longimply}{\;\longrightarrow\;}
+\newcommand*{\longImply}{\;\Longrightarrow\;}
+\newcommand*{\when}{\leftarrow}
+\newcommand*{\When}{\Leftarrow}
+\newcommand*{\longif}{\;\longleftarrow\;}
+\newcommand*{\longwhen}{\;\longleftarrow\;}
+\newcommand*{\longIf}{\;\Longleftarrow\;}
+\newcommand*{\longWhen}{\;\Longleftarrow\;}
+\renewcommand*{\iff}{\leftrightarrow}
+\newcommand*{\Iff}{\Leftrightarrow}
+\newcommand*{\longiff}{\longleftrightarrow}
+\newcommand*{\longIff}{\Longleftrightarrow}
+\newcommand*{\conj}{\wedge}
+\newcommand*{\disj}{\vee}
+\newcommand*{\bigconj}{\bigwedge}
+\newcommand*{\bigdisj}{\bigvee}
+\newcommand*{\sat}{\models}
+\newcommand*{\infer}{\vdash}
+\newcommand*{\uninfer}{\nvdash}
+\newcommand*{\unsat}{\nvDash}
+\newcommand*{\true}{\top}
+\newcommand*{\false}{\bot}
+\newcommand*{\model}[1]{\mathcal{#1}}
+\newcommand*{\iso}{\cong}
+\DeclareMathOperator{\qr}{qr}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\fv}{fv}
+\newcommand*{\cl}{c\ell}
+
+%Set Operators
+\newcommand*{\union}{\cup}
+\newcommand*{\bigunion}{\bigcup}
+\newcommand*{\disjunion}{\dot{\cup}}
+\newcommand*{\intersection}{\cap}
+\newcommand*{\bigintersection}{\bigcap}
+\renewcommand*{\complement}[1]{\overline{#1}}
+\newcommand*{\powerset}{\mathcal{P}}
+\newcommand*{\inv}[1]{{#1}^{-1}}
+\newcommand*{\class}[1]{\mathfrak{#1}}
+\newcommand*{\injection}{\rightarrowtail}
+\newcommand*{\surjection}{\twoheadrightarrow}
+\newcommand*{\bijection}{\rightarrowtail\!\!\!\!\!\twoheadrightarrow}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\fld}{fld}
+%\func{function name}{dom}{ran}, or \func{function name}{dom}[arrow]{ran}
+\newcommand*{\TYF@func}[4]{{#1}:\:#2{#3}{#4}}%
+\def\TYF@funci#1#2[#3]#4{\TYF@func{#1}{#2}{#3}{#4}}%
+\def\TYF@funcii#1#2#3{\TYF@func{#1}{#2}{\,\rightarrow\,}{#3}}%
+\newcommand*{\func}{}%
+\def\func#1#2{%
+    \@ifnextchar [{%
+        \TYF@funci{#1}{#2}%
+    }{%
+        \TYF@funcii{#1}{#2}%
+    }%
+}%
+
+%Braces
+\newcommand*{\abs}[1]{\left| #1 \right|}
+\newcommand*{\abS}[1]{\bigl| #1 \bigr|}
+\newcommand*{\aBS}[1]{\Bigl| #1 \Bigr|}
+\newcommand*{\ABS}[1]{\biggl| #1 \biggr|}
+\newcommand*{\aabs}[1]{\left\| #1 \right\|}
+\newcommand*{\aabS}[1]{\bigl\| #1 \bigr\|}
+\newcommand*{\aaBS}[1]{\Bigl\| #1 \Bigr\|}
+\newcommand*{\aABS}[1]{\biggl\| #1 \biggr\|}
+\newcommand*{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand*{\flooR}[1]{\bigl\lfloor #1 \bigr\rfloor}
+\newcommand*{\floOR}[1]{\Bigl\lfloor #1 \Bigr\rfloor}
+\newcommand*{\flOOR}[1]{\biggl\lfloor #1 \biggr\rfloor}
+\newcommand*{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand*{\ceiL}[1]{\bigl\lceil #1 \bigr\rceil}
+\newcommand*{\ceIL}[1]{\Bigl\lceil #1 \Bigr\rceil}
+\newcommand*{\cEIL}[1]{\biggl\lceil #1 \biggr\rceil}
+\newcommand*{\sbracket}[1]{\left\langle #1 \right\rangle}
+\newcommand*{\sbrackeT}[1]{\bigl\langle #1 \bigr\rangle}
+\newcommand*{\sbrackET}[1]{\Bigl\langle #1 \Bigr\rangle}
+\newcommand*{\sbracKET}[1]{\biggl\langle #1 \biggr\rangle}
+\renewcommand*{\brace}[1]{\left\{ #1 \right\}}
+\newcommand*{\bracE}[1]{\bigl\{ #1 \bigr\}}
+\newcommand*{\braCE}[1]{\Bigl\{ #1 \Bigr\}}
+\newcommand*{\brACE}[1]{\biggl\{ #1 \biggr\}}
+\newcommand*{\miD}{\:\big|\:}
+\newcommand*{\mID}{\:\Big|\:}
+\newcommand*{\MID}{\:\bigg|\:}
+
+%Others
+\renewcommand{\emph}[1]{\textbf{#1}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand*{\good}{\ensuremath{\surd}}
+\newcommand*{\bad}{\ensuremath{\times}}
+\renewcommand*{\leq}{\leqslant}
+\renewcommand*{\geq}{\geqslant}
+\newcommand*{\tuple}[1]{\mathtt{#1}}
+%\myvec usage:
+%\myvec{0}[1][2][][3][4] -> C_1,C_2,\cdots,C_3,C_4
+%\myvec[\to]{0}[1][2][][3][4] -> C_1\to C_2\to \cdots\to C_3\to C_4
+\def\TYF@myvecA[#1]{%
+    \def\TYF@connective{#1}
+    \TYF@myvecB
+}%
+\def\TYF@myvecB#1{%
+    \def\TYF@mainpart{#1}%
+    \TYF@myvecC [\@empty]%
+}%
+\def\TYF@myvecC[#1][#2]{%
+    \def\TYF@temp{#2}%
+    \ifx\TYF@temp\@empty%
+        {#1}\cdots%
+    \else%
+        {#1}\TYF@mainpart_{#2}%
+    \fi%
+    \@ifnextchar [{%
+        \TYF@myvecC[\TYF@connective]%
+    }{%
+    }%
+}
+\def\myvec{
+    \@ifnextchar [{
+        \TYF@myvecA
+    }{
+        \TYF@myvecA[,\,]
+    }
+}

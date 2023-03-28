@@ -1,18 +1,9 @@
 \documentclass[UTF8,a4paper]{ctexart}
+\usepackage{taoda}
 \usepackage[lmargin=2cm,rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
-\usepackage{graphicx}
-\usepackage{minted}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{awesomebox}
-\usepackage{hyperref}
 
 \title{Notes on Minimal Cost Flow}
 \author{陶大}
-
-\renewcommand{\emph}[1]{\textbf{#1}}
-\newcommand{\abs}[1]{\left| #1 \right|}
 
 \begin{document}
 
@@ -41,23 +32,35 @@ Solutions satisfy constraints are \emph{feasible}.
 Without loss of generality, we can assume there is exactly one supply and one demand.
 They are called the \emph{source} and the \emph{sink} respectively.
 
-Usually, we are interested in min-cost solutions with maximal flows.
-Let $G=(V, E, {u_e}, {c_e}, {b_v})$ be a MCF, which a min-cost max flow is desired.
-Then we construct $G'=(V', E', {u'_e}, {c'_e}, {b'_v})$.
-\begin{align}
-    V'&=V,\\
-    E'&=E\cup\{e'\},\\
-    u'_e&=\begin{cases}
-        u_e,&\forall e\in E,\\
-        +\infinity,&e',
-    \end{cases}\\
-\end{align}
+\begin{lemma}
+    A maximal flow is also a feasible min-cost flow.
+\end{lemma}
 
-% \begin{lemma}
-%     A maximal flow is also a feasible min-cost flow.
-% \end{lemma}
-
+\begin{remark}
+    Usually, we are interested in min-cost max-flow solutions.
+    Let $G=(V, E, {u_e}, {c_e}, {b_v})$ be a MCF setting with a single source and a single sink,
+    where a min-cost max flow is desired.
+    Then we construct $G'=(V', E', {u'_e}, {c'_e}, {b'_v})$ as follows.
+    \begin{align}
+        V'&=V,\\
+        E'&=E\cup\{e'\},\\
+        u'_e&=\begin{cases}
+            u_e,&\forall e\in E,\\
+            +\infty,&e',
+        \end{cases}\\
+        c'_e&=\begin{cases}
+            c_e,&\forall e\in E,\\
+            -\infty,&e',
+        \end{cases}\\
+        b'_v&=\vec{0}
+    \end{align}
+    where $e'$ connects the only sink back to the source.
+    The key is to minimize total cost, flow over $e'$ must be maximal.
+    To achieve this, $c_{e'}$ must not be $-\infty$.
+    $-\sum_{e\in E}\abs{c_e}$ is small enough.
+\end{remark}
 
 \section{Applications}
+
 
 \end{document}
