@@ -32,10 +32,6 @@ Solutions satisfy constraints are \emph{feasible}.
 Without loss of generality, we can assume there is exactly one supply and one demand.
 They are called the \emph{source} and the \emph{sink} respectively.
 
-\begin{lemma}
-    A maximal flow is also a feasible min-cost flow.
-\end{lemma}
-
 \begin{remark}
     Usually, we are interested in min-cost max-flow solutions.
     Let $G=(V, E, {u_e}, {c_e}, {b_v})$ be a MCF setting with a single source and a single sink,
@@ -56,11 +52,99 @@ They are called the \emph{source} and the \emph{sink} respectively.
     \end{align}
     where $e'$ connects the only sink back to the source.
     The key is to minimize total cost, flow over $e'$ must be maximal.
-    To achieve this, $c_{e'}$ must not be $-\infty$.
+    To achieve this, $-\infty$ is not necessary for $c_{e'}$.
     $-\sum_{e\in E}\abs{c_e}$ is small enough.
 \end{remark}
 
 \section{Applications}
 
+\subsection{Linear programs with consecutive 1's in columns}
+
+Let us take a look at an example.
+\[
+    \min \sum_i c_i x_i
+\]
+s.t.
+\begin{align*}
+    \begin{bmatrix}
+        0&1&0&1&1\\
+        1&1&0&0&1\\
+        1&1&1&0&0\\
+        1&1&1&0&0
+    \end{bmatrix}
+    x &\geq \begin{bmatrix}
+        5\\
+        12\\
+        10\\
+        6
+    \end{bmatrix}
+    \\
+    x&\geq 0
+\end{align*}
+
+We first make the first constraint into an equality by introducing surplus variable $y$,
+and then a redundant row $0\cdot x + 0\cdot y=0$.
+So we get
+\begin{align*}
+    \begin{bmatrix}
+        0&1&0&1&1& -1&0&0&0\\
+        1&1&0&0&1& 0&-1&0&0\\
+        1&1&1&0&0& 0&0&-1&0\\
+        1&1&1&0&0& 0&0&0&-1\\
+        0&0&0&0&0& 0&0&0&0
+    \end{bmatrix}
+    \begin{bmatrix}
+        x\\
+        y
+    \end{bmatrix}
+    &=\begin{bmatrix}
+        5\\
+        12\\
+        10\\
+        6\\
+        0
+    \end{bmatrix}
+    \\ x&\geq 0
+    \\ y&\geq 0
+\end{align*}
+
+Then we perform the following operation from bottom to up:
+we subtract row $i$ by row $i-1$ for each $i$.
+So we get
+\[
+    \min \sum_i c_i x_i
+\]
+s.t.
+\begin{align*}
+    \begin{bmatrix}
+        0&1&0&1&1& -1&0&0&0\\
+        1&0&0&-1&0& 1&-1&0&0\\
+        0&0&1&0&-1& 0&1&-1&0\\
+        0&0&0&0&0& 0&0&1&-1\\
+        -1&-1&-1&0&0& 0&0&0&1
+    \end{bmatrix}
+    \begin{bmatrix}
+        x\\
+        y
+    \end{bmatrix}
+    &=\begin{bmatrix}
+        5\\
+        7\\
+        -2\\
+        -4\\
+        -6
+    \end{bmatrix}
+    \\ x&\geq 0
+    \\ y&\geq 0
+\end{align*}
+This is actually a MCF problem illustrated by Fig~\ref{fig:app:lp}.
+
+\begin{figure}
+    \begin{center}
+        \includegraphics{fig/application-lp.pdf}
+    \end{center}
+    \caption{Formulating a linear program with consecutive 1's as a MCF problem}
+    \label{fig:app:lp}
+\end{figure}
 
 \end{document}
