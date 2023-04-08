@@ -62,7 +62,7 @@ They are called the \emph{source} and the \emph{sink} respectively.
 
 Let us take a look at an example.
 \[
-    \min \sum_i c_i x_i
+    \min \vec{c}\cdot \vec{x}
 \]
 s.t.
 \begin{align*}
@@ -72,18 +72,18 @@ s.t.
         1&1&1&0&0\\
         1&1&1&0&0
     \end{bmatrix}
-    x &\geq \begin{bmatrix}
+    \vec{x} &\geq \begin{bmatrix}
         5\\
         12\\
         10\\
         6
     \end{bmatrix}
     \\
-    x&\geq 0
+    \vec{x}&\geq \vec{0}
 \end{align*}
 
 We first make the first constraint into an equality by introducing surplus variable $y$,
-and then a redundant row $0\cdot x + 0\cdot y=0$.
+and then a redundant row $\vec{0}\cdot \vec{x} + \vec{0}\cdot \vec{y}=\vec{0}$.
 So we get
 \begin{align*}
     \begin{bmatrix}
@@ -94,8 +94,8 @@ So we get
         0&0&0&0&0& 0&0&0&0
     \end{bmatrix}
     \begin{bmatrix}
-        x\\
-        y
+        \vec{x}\\
+        \vec{y}
     \end{bmatrix}
     &=\begin{bmatrix}
         5\\
@@ -104,15 +104,15 @@ So we get
         6\\
         0
     \end{bmatrix}
-    \\ x&\geq 0
-    \\ y&\geq 0
+    \\ \vec{x}&\geq \vec{0}
+    \\ \vec{y}&\geq \vec{0}
 \end{align*}
 
 Then we perform the following operation from bottom to up:
 we subtract row $i$ by row $i-1$ for each $i$.
 So we get
 \[
-    \min \sum_i c_i x_i
+    \min \vec{c}\cdot\vec{x}
 \]
 s.t.
 \begin{align*}
@@ -124,8 +124,8 @@ s.t.
         -1&-1&-1&0&0& 0&0&0&1
     \end{bmatrix}
     \begin{bmatrix}
-        x\\
-        y
+        \vec{x}\\
+        \vec{y}
     \end{bmatrix}
     &=\begin{bmatrix}
         5\\
@@ -134,8 +134,8 @@ s.t.
         -4\\
         -6
     \end{bmatrix}
-    \\ x&\geq 0
-    \\ y&\geq 0
+    \\ \vec{x}&\geq \vec{0}
+    \\ \vec{y}&\geq \vec{0}
 \end{align*}
 This is actually a MCF problem illustrated by Fig~\ref{fig:app:lp}.
 
@@ -146,5 +146,31 @@ This is actually a MCF problem illustrated by Fig~\ref{fig:app:lp}.
     \caption{Formulating a linear program with consecutive 1's as a MCF problem}
     \label{fig:app:lp}
 \end{figure}
+
+\section{Algorithms}
+
+\begin{definition}[Residual network]
+    Let $G=(V, E)$ a directed graph with capacities $\vec{u}$ and $\vec{x}$ a feasible flow over it.
+    Then the residual network $R(x)=(V', E')$ is also a directed graph with capacities $\vec{u'}$.
+    They share the same set of vertices.
+    But for each edge $e\in E$, there are two edges $e$ and $\inv{e}$ in $E'$.
+    One is forward, with residual capacity $u_e-x_e$;
+    the other is backward, with capacity $x_e$.
+    \begin{align*}
+        V' &=V,\\
+        E' &=\brace{e,\inv{e} \mid e\in E},\\
+        u'_e &=\begin{cases}
+            u_e-x_e,&e\in E\\
+            x_e,&\inv{e}\in E
+        \end{cases}
+    \end{align*}
+    where $\inv{e}$ stands for the inverse of edge $e$
+    (Suppose $e$ connects $v_0$ to $v_1$, then $\inv{e}$ connects $v_1$ to $v_0$.)
+
+    Intuitively, because the residual graph shares the same vertices with the original graph,
+    they also share the same balance condition.
+    Once there is a path from a source to a sink in the residual graph,
+    we can adjust flow in the original graph alongside this path by one unit and keep the balance condition.
+\end{definition}
 
 \end{document}
