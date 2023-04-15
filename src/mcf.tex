@@ -33,7 +33,14 @@ Without loss of generality, we can assume there is exactly one supply and one de
 They are called the \emph{source} and the \emph{sink} respectively.
 
 \begin{remark}
-    Usually, we are interested in min-cost max-flow solutions.
+    Please notice, that $\vec{b}$ \emph{equals with} the net out-flows.
+    This is a constraint in minimal-cost flow problem.
+    This is not the same as the settings in maximal flow problem.
+\end{remark}
+
+\begin{remark}
+    Usually, we are interested in min-cost max-flow problem.
+
     Let $G=(V, E, {u_e}, {c_e}, {b_v})$ be a MCF setting with a single source and a single sink,
     where a min-cost max flow is desired.
     Then we construct $G'=(V', E', {u'_e}, {c'_e}, {b'_v})$ as follows.
@@ -46,15 +53,51 @@ They are called the \emph{source} and the \emph{sink} respectively.
         \end{cases}\\
         c'_e&=\begin{cases}
             c_e,&\forall e\in E,\\
-            -\infty,&e',
+            -C,&e',
         \end{cases}\\
         b'_v&=\vec{0}
     \end{align}
-    where $e'$ connects the only sink back to the source.
-    The key is to minimize total cost, flow over $e'$ must be maximal.
-    To achieve this, $-\infty$ is not necessary for $c_{e'}$.
-    $-\sum_{e\in E}\abs{c_e}$ is small enough.
+    where $e'$ connects the only sink back to the source,
+    and $C$ is a large enough (so $c'_e$ is overwhelmingly small).
+
+    To minimize the total cost, flow over $e'$ must be maximal.
+    Typically, $C=\sum_{e\in E}\abs{c_e}$.
 \end{remark}
+
+\begin{definition}[Residual network]
+    Let $G=(V, E)$ a directed graph with capacities $\vec{u}$ and $\vec{x}$ a feasible flow over it.
+    Then the residual network $R(x)=(V', E')$ is also a directed graph with capacities $\vec{u'}$.
+    They share the same set of vertices.
+    But for each edge $e\in E$, there are two edges $e$ and $\inv{e}$ in $E'$.
+    One is forward, with residual capacity $u_e-x_e$;
+    the other is backward, with capacity $x_e$.
+    \begin{align*}
+        V' &=V,\\
+        E' &=\brace{e,\inv{e} \mid e\in E},\\
+        u'_e &=\begin{cases}
+            u_e-x_e,&e\in E\\
+            x_e,&\inv{e}\in E
+        \end{cases}
+    \end{align*}
+    where $\inv{e}$ stands for the inverse of edge $e$
+    (Suppose $e$ connects $v_0$ to $v_1$, then $\inv{e}$ connects $v_1$ to $v_0$.)
+
+    Intuitively, because the residual graph shares the same vertices with the original graph,
+    they also share the same balance condition.
+    Once there is a path from a source to a sink in the residual graph,
+    we can adjust flow in the original graph alongside this path by one unit and keep the balance condition.
+\end{definition}
+
+\begin{definition}[Path and circle flow]
+    A path (or circle) flow is an acyclic path (or simple cycle) with a same amount of flows in each edge.
+\end{definition}
+
+\begin{lemma}[Flow Decomposition]
+    Every flowed graph can be represented by a set of positive path flows and cycle flows.
+    \begin{itemize}
+        \item
+    \end{itemize}
+\end{lemma}
 
 \section{Applications}
 
@@ -148,29 +191,5 @@ This is actually a MCF problem illustrated by Fig~\ref{fig:app:lp}.
 \end{figure}
 
 \section{Algorithms}
-
-\begin{definition}[Residual network]
-    Let $G=(V, E)$ a directed graph with capacities $\vec{u}$ and $\vec{x}$ a feasible flow over it.
-    Then the residual network $R(x)=(V', E')$ is also a directed graph with capacities $\vec{u'}$.
-    They share the same set of vertices.
-    But for each edge $e\in E$, there are two edges $e$ and $\inv{e}$ in $E'$.
-    One is forward, with residual capacity $u_e-x_e$;
-    the other is backward, with capacity $x_e$.
-    \begin{align*}
-        V' &=V,\\
-        E' &=\brace{e,\inv{e} \mid e\in E},\\
-        u'_e &=\begin{cases}
-            u_e-x_e,&e\in E\\
-            x_e,&\inv{e}\in E
-        \end{cases}
-    \end{align*}
-    where $\inv{e}$ stands for the inverse of edge $e$
-    (Suppose $e$ connects $v_0$ to $v_1$, then $\inv{e}$ connects $v_1$ to $v_0$.)
-
-    Intuitively, because the residual graph shares the same vertices with the original graph,
-    they also share the same balance condition.
-    Once there is a path from a source to a sink in the residual graph,
-    we can adjust flow in the original graph alongside this path by one unit and keep the balance condition.
-\end{definition}
 
 \end{document}
