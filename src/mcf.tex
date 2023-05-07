@@ -93,11 +93,48 @@ They are called the \emph{source} and the \emph{sink} respectively.
 \end{definition}
 
 \begin{lemma}[Flow Decomposition]
-    Every flowed graph can be represented by a set of positive path flows and cycle flows.
+    Every positively flowed graph can be represented by a set of positive path flows and cycle flows.
     \begin{itemize}
-        \item
+        \item every path flow starts from a supply and ends at a demand.
+        \item At most $\abs{V}+\abs{E}$ paths and cycles have nonzero flow; among them, at most $\abs{E}$ cycles have nonzero flow.
     \end{itemize}
 \end{lemma}
+
+\begin{lemma}[Augmenting Cycle Theorem]
+    Let $x$ and $x^\circ$ be any two feasible solutions of a network flow problem.
+    Then $x$ equals $x^\circ$ plus the flow on at most $\abs{E}$ cycles in residual graph $R(x^\circ)$.
+    Furthermore, the cost of $x$ equals with that of $x^\circ$ plus those of these augmenting cycles.
+\end{lemma}
+
+These lemmas imply the following interesting theorem.
+
+\begin{theorem}[Negative Cycle Optimality Theorem]
+    A feasible solution of minimum cost flow problem is optimal if and only if the residual network contains no negative cost cycles.
+\end{theorem}
+
+\begin{definition}
+    Let $\pi$ associate every vertex with a real number.
+    We call $\pi(v)$ the \emph{potential} of $v$.
+    Then we define the \emph{reduced cost} $c^\pi$ induced by potential $\pi$ by
+    \begin{align}
+        c^\pi_e&=c_e + \pi(j) - \pi(i) &\forall e\in E
+    \end{align}
+    where $i$ is the source of $e$ and $j$ the sink of that.
+
+    It is easy to see,
+    \begin{enumerate}
+        \item For any path $P$ from $i$ to $j$, $\sum_{e\in P}c^\pi_e = \sum_{e\in P}c_e + \pi(j) - \pi(i)$.
+        \item For any cycle $P$, $\sum_{e\in P}c^\pi_e = \sum_{e\in P} c_e$.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}{Reduced Cost Optimality Theorem}
+    A feasible solution $x$ is optimal iff there is a $\pi$ such that $c^\pi(e)\geq 0$ for all edge $e\in R(x)$.
+\end{theorem}
+
+There is an intuitive interpretation behind reduced-cost optimality.
+Let $\mu(i)=-\pi(i)$ for all $i\in G$ as the cost of obtaining one unit of the commodity at $i$.
+Then RCO theorem says, that cost at $j$ is no more than that at $i$ plus the cost of transporting a unit from $i$ to $j$.
 
 \section{Applications}
 
