@@ -134,7 +134,17 @@ These lemmas imply the following interesting theorem.
 
 There is an intuitive interpretation behind reduced-cost optimality.
 Let $\mu(i)=-\pi(i)$ for all $i\in G$ as the cost of obtaining one unit of the commodity at $i$.
-Then RCO theorem says, that cost at $j$ is no more than that at $i$ plus the cost of transporting a unit from $i$ to $j$.
+Then RCO theorem says, that cost difference between $i$ and $j$ is no more than that of transporting a unit from $i$ to $j$.
+
+\begin{theorem}{Complementary Slackness Optimality Conditions}
+    A feasible solution $x$ is optimal iff
+    there is a potential $\pi$ such that
+    \begin{align}
+        x^\pi_e =0, &\qquad\text{if }c^\pi_e > 0\\
+        c^\pi_e = 0, &\qquad\text{if }0 < x^\pi_e < u_e\\
+        x^\pi_e = u_e, &\qquad\text{if }c^\pi_e < 0
+    \end{align}
+\end{theorem}
 
 \section{Applications}
 
