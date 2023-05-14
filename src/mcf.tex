@@ -10,7 +10,7 @@
 \maketitle
 \tableofcontents
 
-\section{Definitions}
+\section{Definitions and Properties}
 
 For a directed graph $G=(V, E)$, there is nonnegative capacity $u_e$ associated with each edge
 and balance $b_v$ with each vertex.
@@ -114,8 +114,8 @@ These lemmas imply the following interesting theorem.
 
 \begin{definition}
     Let $\pi$ associate every vertex with a real number.
-    We call $\pi(v)$ the \emph{potential} of $v$.
-    Then we define the \emph{reduced cost} $c^\pi$ induced by potential $\pi$ by
+    We call $\pi(v)$ the \emph{node potential} of $v$.
+    Then we define the \emph{reduced cost} $c^\pi$ induced by node potential $\pi$ by
     \begin{align}
         c^\pi_e&=c_e + \pi(j) - \pi(i) &\forall e\in E
     \end{align}
@@ -126,6 +126,21 @@ These lemmas imply the following interesting theorem.
         \item For any path $P$ from $i$ to $j$, $\sum_{e\in P}c^\pi_e = \sum_{e\in P}c_e + \pi(j) - \pi(i)$.
         \item For any cycle $P$, $\sum_{e\in P}c^\pi_e = \sum_{e\in P} c_e$.
     \end{enumerate}
+
+    Let $z_\pi(\cdot)$ be the objective function of MCF problem with costs $c^\pi$.
+    By noticing that $c^\pi=c$ when $\pi=\vec{0}$, $z_{\vec{0}}$ is the original objective function.
+    Then we have
+    \[
+        z_{\vec{0}}(x)-z_\pi(x)=\sum_{v\in V}\pi(v)b_v, \qquad \forall\text{ feasible solution } x
+    \]
+    For any vertex $v$, increasing its node potential from $0$ to $\pi(v)$ means
+    \begin{itemize}
+        \item Cost of every unit going into it increases $\pi(v)$;
+        \item and cost of going-away unit decreases $\pi(v)$.
+    \end{itemize}
+    Then the net profit of $v$ is $b_v\pi(v)$.
+
+    Because $\sum_{v\in V}\pi(v)b_v$ is a constant w.r.t.\ $x$, a flow minimizing $z_\pi$ also minimizes $z_{\vec{0}}$.
 \end{definition}
 
 \begin{theorem}{Reduced Cost Optimality Theorem}
@@ -138,12 +153,48 @@ Then RCO theorem says, that cost difference between $i$ and $j$ is no more than 
 
 \begin{theorem}{Complementary Slackness Optimality Conditions}
     A feasible solution $x$ is optimal iff
-    there is a potential $\pi$ such that
+    there is a node potential $\pi$ such that
     \begin{align}
-        x^\pi_e =0, &\qquad\text{if }c^\pi_e > 0\\
-        c^\pi_e = 0, &\qquad\text{if }0 < x^\pi_e < u_e\\
-        x^\pi_e = u_e, &\qquad\text{if }c^\pi_e < 0
+        x^\pi_e &=0, \qquad\text{if }c^\pi_e > 0\\
+        c^\pi_e &=0, \qquad\text{if }0 < x^\pi_e < u_e\\
+        x^\pi_e &=u_e, \qquad\text{if }c^\pi_e < 0
     \end{align}
+\end{theorem}
+
+\begin{definition}[Dual Minimum Cost Flow Problem]
+    For a MCF problem $(\brace{u_e}_{e\in E}, \brace{c_e}_{e\in E}, \brace{b_v}_{v\in V})$,
+    its dual problem is
+    \[
+        \max w(\pi, \alpha)=\sum_{v\in V}b_v\pi(v) - \sum_{e\in E}u_e\alpha_e
+    \]
+    subject to
+    \begin{align}
+        \pi(i) - \pi(j) - \alpha_e &\leq c_e, \qquad\forall e\in E\text{ and $e$ goes from $i$ to $j$}\\
+        \alpha_e&\geq 0, \qquad\forall e\in E
+    \end{align}
+    We will see later, $\pi$ here is node potential.
+\end{definition}
+
+\begin{theorem}[Weak Duality Theorem]
+    Let $z(\cdot)$ be the objective function of a MCF problem, and $w(\cdot, \cdot)$ be that of it dual problem.
+    Then for all feasible solution $x$ to the primal problem and $(\pi, \alpha)$ to the dual one,
+    \[
+        w(\pi,\alpha)\leq z(x)
+    \]
+\end{theorem}
+
+\begin{theorem}[Strong Duality Theorem]
+    Let $z$ be the objective function of a MCF problem and $w$ that of its dual problem.
+    If the primal problem is solvable,
+    then there is a solution $x$ to the primal problem and a solution $\pi$ to the dual problem satisfying
+    $z(x)=w(\pi, \alpha)$ where $\alpha_e = \max\brace{0, -c^\pi_e}$.
+
+    We just simply write $w(\pi)$ if $\alpha$ is set in this way.
+\end{theorem}
+
+\begin{theorem}
+    Let $x$ be an optimal solution to the MCF problem and $\pi$ be an optional solution to the dual problem.
+    Then the pair $(x, \pi)$ statisfies the complementary slackness optimality conditions.
 \end{theorem}
 
 \section{Applications}
