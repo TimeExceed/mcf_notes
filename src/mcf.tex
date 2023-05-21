@@ -194,7 +194,7 @@ Then RCO theorem says, that cost difference between $i$ and $j$ is no more than 
 
 \begin{theorem}
     Let $x$ be an optimal solution to the MCF problem and $\pi$ be an optional solution to the dual problem.
-    Then the pair $(x, \pi)$ statisfies the complementary slackness optimality conditions.
+    Then the pair $(x, \pi)$ satisfies the complementary slackness optimality conditions.
 \end{theorem}
 
 \section{Applications}
@@ -359,6 +359,42 @@ and sends flow from $s$ to $t$ along a shortest path in the residual network.
     or if $e(v)<0$, $-e(v)$ as \emph{deficit}.
 \end{definition}
 
+\begin{lemma}
+    Suppose that a pseudoflow $x$ satisfies the reduced cost optimality conditions w.r.t.\ node potentials $\pi$.
+    Let $d$ represent the shortest path distances from some node $s$ to all other nodes
+    in the residual network with $c^\pi_e$ as the length of edge $e$.
+    The the following properties are valid:
+    \begin{itemize}
+        \item $x$ also satisfies reduced cost optimality conditions w.r.t.\ $\pi'=\pi-d$.
+        \item The reduced costs $c^{\pi'}_e$ are zero for all edge $e$ in the shortest paths from $s$.
+    \end{itemize}
+\end{lemma}
+
+This lemma has an immediate corollary.
+
+\begin{lemma}
+    Suppose that a pseudoflow $x$ satisfies the reduced cost optimality
+    and we obtain $x'$ from $x$ by sending flow along a shortest path from one node to another,
+    then $x'$ also satisfies the reduced cost optimality conditions.
+\end{lemma}
+
+\begin{algorithmic}
+    \Procedure{Successive-Shortest-Path}{}
+        \State $x$ $\gets$ 0
+        \State $\pi$ $\gets$ 0
+        \State $e$ $\gets$ $b$
+        \State $E$ $\gets$ $\brace{v\mid e(v)>0}$
+        \State $D$ $\gets$ $\brace{v\mid e(v)<0}$
+        \While{$E\neq \emptyset$}
+            \State select a node $s\in E$ and $t\in D$
+            \State $d$ $\gets$ shortest path distances from $s$ w.r.t.\ $\brace{c^\pi_e}$.
+            \State let $P$ denote the shortest path from $s$ to $t$.
+            \State $\delta$ $\gets$ $\min\brace{e(s), -e(t)}\union\brace{r_e \mid e\in P}$
+            \State $\pi$ $\gets$ $\pi - d$
+            \State augment $\delta$ units of flow along the path $P$
+        \EndWhile
+    \EndProcedure
+\end{algorithmic}
 
 
 \end{document}
