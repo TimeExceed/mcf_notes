@@ -290,4 +290,75 @@ This is actually a MCF problem illustrated by Fig~\ref{fig:app:lp}.
 
 \section{Algorithms}
 
+We defines some symbols for simplicity.
+\begin{align}
+    n&=\abs{V}\\
+    m&=\abs{E}\\
+    C&=\max{c_e \mid e\in E}\\
+    U&=\max{u_e \mid e\in E}
+\end{align}
+
+\subsection{Cycle-Canceling}
+
+The cycle-canceling algorithm maintains feasibility and attempts to achieve optimality.
+
+\begin{algorithmic}
+    \Procedure{Cycle-Canceling}{}
+        \State Establishs a feasible flow $f$ and its corresponding residual graph $G$.
+        \While{there is cycles of negative cost in $G$}
+            \State $W$ $\gets$ an arbitrary negative-cost cyclce in $G$.
+            \State $\delta$ $\gets$ $\min \brace{u_e \mid e \in W}$.
+            \State Augments $\delta$ units of flow in the cycle $W$ and update $G$.
+        \EndWhile
+    \EndProcedure
+\end{algorithmic}
+
+\begin{theorem}{Integrality Property}
+    If all edge capacities and balancing conditions of nodes are integer,
+    there is always an integer optimal solution to the MCF problem.
+\end{theorem}
+
+The cost of the optimal solution is bounded by $[-mCU, mCU]$.
+In each iteration, at most -1 cost is improved.
+So there will be at most $O(mCU)$ iterations.
+In each iteration, we will take $O(nm)$ to find a cycle of negative cost.
+So the time complexity is $O(nm^2CU)$.
+Different policies in selecting cycles to augment cause different worst-case behavior.
+
+\subsubsection{With maximum improvement}
+
+It takes at most $O(m\log (mCU))$ iterations if we can always augment cycles with maximum improvement.
+Although finding max-improvement cycle is NP-hard,
+but a modest variation of this approach results in polynomial-time algorithm.
+
+\subsubsection{With minimum mean cost}
+
+It is possible to identify a minimum mean cycle in $O(nm)$ or $O(\sqrt{n} m \log (nC))$.
+If we always augment flows along minimum mean cycles,
+it performs $O(\min\brace{nm \log (nC), nm^2 \log n})$ iterations.
+
+\subsection{Successive Shortest Path}
+
+The successive shortest path algorithm maintains capacity constraints but violates the balancing conditions.
+In each iteration, it selects a node $s$ with excess supply and a node $t$ with unfulfilled demand,
+and sends flow from $s$ to $t$ along a shortest path in the residual network.
+
+\begin{definition}[pseudoflow]
+    A \emph{pseudoflow} $x$ associates each edge $e$ with a flow
+    obeying capacity constraints and unnecessarily satisfying balancing conditions,
+    i.e.,
+    \[
+        0\leq x_e \leq u_e
+    \]
+    We also define \emph{imbalance} of node $v$ as
+    \[
+        e(v)=b_v + \sum_{e\in E\text{ goes into }v} x_e - \sum_{e\in E\text{ goes out of }v} x_e
+    \]
+    If $e(v)=0$, node $v$ is \emph{balanced}.
+    Otherwise, if $e(v)>0$, we call $e(v)$ as its \emph{excess},
+    or if $e(v)<0$, $-e(v)$ as \emph{deficit}.
+\end{definition}
+
+
+
 \end{document}
